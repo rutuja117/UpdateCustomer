@@ -1,0 +1,1007 @@
+﻿{
+  "openapi": "3.0.2",
+  "info": {
+    "version": "2.0.0",
+    "title": "Party API",
+    "description": "This API allows the consumer to retrieve the Party details. It also allows to retrieve and update the Legal Address of a Party and to update the Legal name of a Party, being an individual or organisation.",
+    "x-apiType": "enterprise"
+  },
+  "servers": [
+    {
+      "url": "https://api-st-iag.nl.eu.abnamro.com/parties/v2",
+      "description": "ST server"
+    },
+    {
+      "url": "https://api-et-iag.nl.eu.abnamro.com/parties/v2",
+      "description": "ET server"
+    },
+    {
+      "url": "https://api-pr-iag.nl.eu.abnamro.com/parties/v2",
+      "description": "PR server"
+    }
+  ],
+  "paths": {
+    "/{partyId}": {
+      "get": {
+        "tags": [
+          "Party"
+        ],
+        "description": "This operation enables the consumer to retrieve the details of a Party.",
+        "operationId": "getParty",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Consumer-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Trace-Id"
+          },
+          {
+            "name": "partyId",
+            "in": "path",
+            "description": "Unique identifier for the party. Example: 2167. The Party ID can be of maximum 12 digits.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\"Successful operation\"\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Party"
+                },
+                "example": {
+                  "partyId": 1020560,
+                  "partyType": "ORGANISATION",
+                  "customerId": 1150836,
+                  "clientGroupCode": "1109",
+                  "secUSPersonStatus": "PARTY_IS_A_SEC_US_PERSON_AND_IS_A_COUNTERPARTY",
+                  "managedByOrganisationUnitId": 231071,
+                  "preferredLanguage": "EN",
+                  "organisation": {
+                    "kvkNumber": "34334259",
+                    "foundationDate": "2017-01-01",
+                    "legalStructureType": "EU_EUROPEES_ECONOMISCH_SAMENWERKINGSVERBAND",
+                    "organisationActivity": "50401",
+                    "organisationIndustry": "50202",
+                    "incorporatedInUS": true
+                  },
+                  "legalName": {
+                    "organisationName": "Hema BV",
+                    "metaData": {
+                      "createdByUserId": "BA2146",
+                      "creationTimestamp": "2018-07-05T11:00:09.951Z",
+                      "lastModifiedByUserId": "BA2146",
+                      "lastModifiedTimestamp": "2019-09-16T12:03:07.715Z"
+                    }
+                  },
+                  "legalAddress": {
+                    "supplementaryDeliveryPoint": "Across Restaurant The Red Heifer",
+                    "streetName": "Meander",
+                    "houseNumber": "75-B",
+                    "buildingName": "Miles Building",
+                    "proximateCityName": "Amsterdam",
+                    "cityName": "Amstelveen",
+                    "regionName": "North-Holland",
+                    "countryCode": "NL",
+                    "postCode": "1181 WN",
+                    "metaData": {
+                      "createdByUserId": "BA2146",
+                      "creationTimestamp": "2018-07-05T11:00:09.951Z",
+                      "lastModifiedByUserId": "BA2146",
+                      "lastModifiedTimestamp": "2019-09-16T12:03:07.715Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\"Bad Request\"\n\nDetailed Error List: \n---\n- PARTY_ID_INVALID\n  > The PartyId is invalid.\n- PARTY_ID_INACTIVE\n  > The PartyId is inactive.\n- PARTY_ID_LENGTH_EXCEEDED\n  > The PartyId is exceeding the maximum field length of 12 digits.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_ID_LENGTH_EXCEEDED",
+                      "message": "The PartyId is exceeding the maximum field length of 12 digits.",
+                      "traceId": "456",
+                      "status": "400"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\"Resource not found\"\n\nDetailed Error List: \n---\n- PARTY_NOT_FOUND\n  > The Party cannot be found.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_NOT_FOUND",
+                      "message": "The Party cannot be found.",
+                      "traceId": "123",
+                      "status": "404"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrors"
+          }
+        }
+      }
+    },
+    "/{partyId}/legal-address": {
+      "get": {
+        "tags": [
+          "PartyLegalAddress"
+        ],
+        "description": "This operation enables the consumer to retrieve the Legal Address of a Party. ",
+        "operationId": "getPartyLegalAddress",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Consumer-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Trace-Id"
+          },
+          {
+            "name": "partyId",
+            "in": "path",
+            "description": "Unique identifier for the party. Example: 2167. The Party ID can be of maximum 12 digits.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "\"Successful operation\"\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FullLegalAddress"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "\"Bad Request\"\n\nDetailed Error List: \n---\n- PARTY_ID_INVALID\n  > The PartyId is invalid.\n- PARTY_ID_INACTIVE\n  > The PartyId is inactive.\n- PARTY_ID_LENGTH_EXCEEDED\n  > The PartyId is exceeding the maximum field length of 12 digits.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_ID_LENGTH_EXCEEDED",
+                      "message": "The PartyId is exceeding the maximum field length of 12 digits.",
+                      "traceId": "456",
+                      "status": "400"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\"Resource not found\"\n\nDetailed Error List: \n---\n- PARTY_NOT_FOUND\n  > The Party cannot be found.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_NOT_FOUND",
+                      "message": "The Party cannot be found.",
+                      "traceId": "123",
+                      "status": "404"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrors"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PartyLegalAddress"
+        ],
+        "description": "This operation enables the consumer to update the Legal Address of a Party. ",
+        "operationId": "updatePartyLegalAddress",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Consumer-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Trace-Id"
+          },
+          {
+            "name": "User-Id",
+            "in": "header",
+            "description": "Indicates the User-Id which triggered this PUT-method to update the Address. It is used for audit-trailing. Example: BA2146.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 30
+            }
+          },
+          {
+            "name": "E-Tag",
+            "in": "header",
+            "description": "This field is passed by the consumer to indicate which version of Party was read during the update process to ensure that the version has not changed in between the get and the update request. Example: 23573.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 30
+            }
+          },
+          {
+            "name": "partyId",
+            "in": "path",
+            "description": "Unique identifier for the party. Example: 2167. The Party ID can be of maximum 12 digits.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "LegalAddress payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LegalAddress"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "\"Successful operation.\"\n"
+          },
+          "400": {
+            "description": "\"Bad Request.\"\n\nDetailed Error List: \n---\n- BUILDING_NAME_LENGTH_EXCEEDED\n  > The BuildingName is exceeding the maximum field length of 50 characters for this country.\n- BUILDING_NAME_NOT_ALLOWED\n  > The BuildingName is not allowed for the dutch address.\n- CITY_NAME_LENGTH_EXCEEDED\n  > The CityName is exceeding the maximum field length of 30 characters for this country.\n- CITY_NAME_MAY_NOT_START_WITH_CHAR\n  > The CityName may not start with Hyphens (-), dots (.), comma's (,), slashes (/) or ampersands (&amp;).\n- CITY_NAME_MAY_NOT_START_WITH_SPACES\n  > The CityName may not start with spaces.\n- CITY_NAME_MISSING\n  > The CityName is missing for the dutch address.\n- CITY_NAME_SUCCESSIVE_CHAR_NOT_ALLOWED\n  > The CityName may not allow two or more successive hyphens (--), dots (..), comma's (,,), quotes (''), slashes (//), ampersands (&amp;&amp;), spaces (  ).\n- COUNTRY_CODE_INVALID\n  > Country code provided in the input is not a valid ISO country code.\n- COUNTRY_CODE_LENGTH_EXCEEDED\n  > Country code can have maximum length of 2 as per ISO standard.\n- COUNTRY_CODE_MISSING\n  > The CountryCode is missing in the input.\n- DUTCH_ADDRESS_MISMATCH\n  > The Postcode and House number for dutch addresses are not matching with the CityName and StreetName fields.\n- ETAG_LENGTH_EXCEEDED\n  > The E-Tag is exceeding the maximum field length of 30 characters.\n- ETAG_NOT_FILLED\n  > The E-tag is not filled, it should be filled with the value that is retrieved in the latest read operation of the Party.\n- HOUSE_NUMBER_INVALID\n  > The HouseNumber must have valid numbers only before the (-) (hyphen).\n- HOUSE_NUMBER_LENGTH_EXCEEDED\n  > The HouseNumber is exceeding the maximum field length of 12 characters for this country.\n- HOUSE_NUMBER_MAY_NOT_END_WITH_CHAR\n  > The HouseNumber may not end with a space ( ) or hyphen (-).\n- HOUSE_NUMBER_MAY_NOT_START_WITH_CHAR\n  > The HouseNumber may not start with Hyphens (-), dots (.), comma's (,), slashes (/) or ampersands (&amp;).\n- HOUSE_NUMBER_MAY_NOT_START_WITH_SPACE\n  > The HouseNumber may not start with spaces.\n- HOUSE_NUMBER_MISSING\n  > The HouseNumber is missing for the dutch address.\n- HOUSE_NUMBER_SUFFIX_EMPTY\n  > The HouseNumber suffix is missing after - (hyphen), either remove hyphen or provide HouseNumber suffix.\n- HOUSE_NUMBER_SUFFIX_INVALID\n  > The HouseNumber suffix may only contain Numeric-values, Capitals or have one Hyphen (-) or have one Space ( ).\n- HOUSE_NUMBER_SUFFIX_MAY_NOT_START_WITH_CHAR\n  > The HouseNumber suffix may not start with Hyphens (-), dots (.), comma's (,), slashes (/) or ampersands (&amp;).\n- HOUSE_NUMBER_SUFFIX_MAY_NOT_START_WITH_SPACE\n  > The HouseNumber suffix may not start with spaces.\n- HOUSE_NUMBER_SUFFIX_SUCCESSIVE_CHAR_NOT_ALLOWED\n  > The HouseNumber suffix may not allow two or more successive hyphens (--), dots (), comma's (,), quotes (''), slashes (//), ampersands (&amp;&amp;), spaces ( ).\n- PARTY_ID_INACTIVE\n  > The PartyId is inactive.\n- PARTY_ID_INVALID\n  > The PartyId is invalid.\n- PARTY_ID_LENGTH_EXCEEDED\n  > The PartyId is exceeding the maximum field length of 12 digits.\n- POST_CODE_DUTCH_ADDRESS_LENGTH_EXCEEDED\n  > The Postcode is exceeding the maximum field length of 7 characters for the dutch address.\n- POST_CODE_INTERNATIONAL_ADDRESS_LENGTH_EXCEEDED\n  > The Postcode is exceeding the maximum field length of 13 characters for this country.\n- POST_CODE_INVALID\n  > The Postcode is invalid.\n- POST_CODE_MISSING\n  > The Postcode is missing for the dutch address.\n- POST_CODE_SPACE_MISSING\n  > The Postcode must have one space between the first 4 positions and the last 2 positions.\n- PROXIMATE_CITY_NAME_LENGTH_EXCEEDED\n  > The ProximateCityName is exceeding the maximum field length of 50 characters for this country.\n- PROXIMATE_CITY_NAME_NOT_ALLOWED\n  > The ProximateCityName is not allowed for the dutch address.\n- REGION_NAME_LENGTH_EXCEEDED\n  > The RegionName is exceeding the maximum field length of 25 characters for this country.\n- REGION_NAME_NOT_ALLOWED\n  > The RegionName is not allowed for the dutch address.\n- STREET_NAME_LENGTH_EXCEEDED\n  > The StreetName is exceeding the maximum field length of 50 characters for this country.\n- STREET_NAME_MAY_NOT_START_WITH_CHAR\n  > The StreetName may not start with Hyphens (-), dots (.), comma's (,), slashes (/) or ampersands (&amp;).\n- STREET_NAME_MAY_NOT_START_WITH_LETTER_COMBINATION\n  > The StreetName may not start with (A/B), (C/O), (P/A), (T/O), (A-B), (C-O), (P-A), (T-O).\n- STREET_NAME_MAY_NOT_START_WITH_SPACES\n  > The StreetName may not start with spaces.\n- STREET_NAME_MISSING\n  > The StreetName is missing for the dutch address.\n- STREET_NAME_POSTBUS_NOT_ALLOWED_FOR_LEGAL_ADDRESS\n  > The StreetName field provided in the input does not allow Postbus for a Legal Address.\n- STREET_NAME_SUCCESSIVE_CHAR_NOT_ALLOWED\n  > The StreetName may not allow two or more successive hyphens (--), dots (..), comma's (,,), quotes (''), slashes (//), ampersands (&amp;&amp;), spaces (  ).\n- SUPPLEMENTARY_DELIVERY_POINT_ENDS_WITH_NOT_ALLOWED\n  > The SupplementaryDeliveryPoint may not end with t/o.\n- SUPPLEMENTARY_DELIVERY_POINT_INVALID\n  > The SupplementaryDeliveryPoint may not contain (t.a.v.), (attn), (p.a.), (p/a.), (p-a.), (c/o).\n- SUPPLEMENTARY_DELIVERY_POINT_INVALID_VALUES\n  > The SupplementaryDeliveryPoint may not contain (hold mail), (post aanhouden) or (mail at post office) or (post op kantoor).\n- SUPPLEMENTARY_DELIVERY_POINT_LENGTH_EXCEEDED\n  > The SupplementaryDeliveryPoint is exceeding the maximum field length of 35 characters for this country.\n- SUPPLEMENTARY_DELIVERY_POINT_NOT_START_WITH_CHAR\n  > The SupplementaryDeliveryPoint may not start with Hyphens (-), dots (.), comma's (,), slashes (/) or ampersands (&amp;).\n- SUPPLEMENTARY_DELIVERY_POINT_NOT_START_WITH_SPACES\n  > The SupplementaryDeliveryPoint may not start with spaces.\n- SUPPLEMENTARY_DELIVERY_POINT_SUCCESSIVE_CHAR_NOT_ALLOWED\n  > The SupplementaryDeliveryPoint may not allow two or more successive hyphens (--), dots (..), comma's (,,), quotes (''), slashes (//), ampersands (&amp;&amp;), spaces (  ).\n- USER_ID_LENGTH_EXCEEDED\n  > The UserId is exceeding the maximum field length of 30 characters.\n- USER_ID_MISSING\n  > The User-Id is missing.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "CITY_NAME_MISSING",
+                      "message": "The CityName is missing for the dutch address.",
+                      "traceId": "456",
+                      "status": "400"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\"Resource not found.\"\n\nDetailed Error List: \n---\n- PARTY_NOT_FOUND\n  > The Party cannot be found.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_NOT_FOUND",
+                      "message": "The Party cannot be found.",
+                      "traceId": "123",
+                      "status": "404"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "\"conflict in resource to be updated\"\n\nDetailed Error List: \n---\n- ETAG_CHANGED\n  > The E-Tag is filled with an old value, this means that the resource is changed after the last read of the resource.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "ETAG_CHANGED",
+                      "message": "The E-Tag is filled with an old value, this means that the resource is changed after the last read of the resource.",
+                      "traceId": "123",
+                      "status": "409"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrors"
+          }
+        }
+      }
+    },
+    "/{partyId}/legal-name": {
+      "put": {
+        "tags": [
+          "PartyLegalName"
+        ],
+        "description": "This operation enables the consumer to update the Legal Name of a Party. ",
+        "operationId": "updateLegalName",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Consumer-Id"
+          },
+          {
+            "$ref": "#/components/parameters/Trace-Id"
+          },
+          {
+            "name": "User-Id",
+            "in": "header",
+            "description": "Indicates the User-Id which triggered this PUT-method to update the Name. It is used for audit-trailing. Example: BA2146.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "E-Tag",
+            "in": "header",
+            "description": "This field is passed by the consumer to indicate which version of Party was read during the update process to ensure that the version has not changed in between the get and the update request. Example: 23573.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "partyId",
+            "in": "path",
+            "description": "Unique identifier for the party. Example: 2167. The Party ID can be of maximum 12 digits.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "LegalName payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLegalName"
+              },
+              "example": {
+                "individualName": {
+                  "nameInitials": "J.K.",
+                  "givenName": "Jan Kurt",
+                  "surnamePrefix": "van",
+                  "surname": "Jenssen"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "\"Successful operation.\"\n"
+          },
+          "400": {
+            "description": "\"Bad Request.\"\n\nDetailed Error List: \n---\n- PARTY_ID_INACTIVE\n  > The PartyId is inactive.\n- PARTY_ID_INVALID\n  > The PartyId is invalid.\n- PARTY_ID_LENGTH_EXCEEDED\n  > The PartyId is exceeding the maximum field length of 12 digits.\n- ETAG_NOT_FILLED\n  > The E-tag in the input is not filled.\n- GIVEN_NAME_MISSING\n  > The givenName  is missing.\n- GIVEN_NAME_INVALID\n  > The first character of givenName must be a letter.\n- GIVEN_NAME_LENGTH_EXCEEDED\n  > The givenName is exceeding the maximum field length of 100 characters.\n- ORGANISATION_NAME_LENGTH_EXCEEDED\n  > The organisationName is exceeding the maximum field length of 105 characters.\n- ORGANISATION_NAME_MISSING\n  > The organisationName is missing.\n- NAME_INTIALS_MISSING\n  > The nameInitials is missing.\n- NAME_INITIALS_LENGTH_EXCEEDED\n  > The nameInitials is exceeding the maximum field length of 10 characters.\n\n- SURNAME_INVALID\n  > The first character of surname must be a letter.\n- NAME_INITIALS_INVALID\n  > The nameInitials provided in input should only have letters and dots.\n- SURNAME_LENGTH_EXCEEDED\n  > The surname is exceeding the maximum field length of 105 characters.\n- NAME_INITIALS_FORMAT_INVALID\n  > Each letter in nameInitials should be separated by a dot. For example: H.A.\n- SURNAME_MISSING\n  > The surname is missing.\n- SURNAME_PREFIX_LENGTH_EXCEEDED\n  > The surnamePrefix is exceeding the maximum field length of 8 characters.\n- USER_ID_MISSING\n  > The User-Id is missing\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_ID_INVALID",
+                      "message": "The PartyId is invalid.",
+                      "traceId": "123",
+                      "status": "400"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "\"Resource not found.\"\n\nDetailed Error List: \n---\n- PARTY_NOT_FOUND\n  > The Party can not be found.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "PARTY_NOT_FOUND",
+                      "message": "The Party can not be found.",
+                      "traceId": "123",
+                      "status": "404"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "\"conflict in resource to be updated\"\n\nDetailed Error List: \n---\n- ETAG_CHANGED\n  > The E-Tag does not match with the latest value. \n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Errors"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "code": "ETAG_CHANGED",
+                      "message": "The E-Tag does not match with the latest value.",
+                      "traceId": "123",
+                      "status": "409"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerErrors"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "ServerErrors": {
+        "description": "\" Internal server error \"\n\nDetailed Error List: \n---\n- INTERNAL_SERVER_ERROR\n  > Internal server error occurred\n",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Errors"
+            },
+            "example": {
+              "errors": [
+                {
+                  "code": "INTERNAL_SERVER_ERROR",
+                  "message": "Internal server error occurred",
+                  "traceId": "abcdef",
+                  "status": "500"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "Consumer-Id": {
+        "in": "header",
+        "name": "Consumer-Id",
+        "description": "Unique value for consumer application calling the API ",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Trace-Id": {
+        "in": "header",
+        "name": "Trace-Id",
+        "description": "Unique end-2-end trace id received from the consumer",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "FullIndividualName": {
+        "description": "Defines the Legal Name of an individual.",
+        "type": "object",
+        "required": [
+          "individualName"
+        ],
+        "properties": {
+          "individualName": {
+            "$ref": "#/components/schemas/IndividualName"
+          }
+        }
+      },
+      "FullLegalName": {
+        "description": "Defines the  Legal Name of either an individual or organisation together with the Meta Data.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FullIndividualName"
+          },
+          {
+            "$ref": "#/components/schemas/FullOrganisationName"
+          }
+        ],
+        "required": [
+          "metaData"
+        ],
+        "properties": {
+          "metaData": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        }
+      },
+      "FullOrganisationName": {
+        "description": "Defines the Legal Name of an organisation.",
+        "type": "object",
+        "required": [
+          "organisationName"
+        ],
+        "properties": {
+          "organisationName": {
+            "description": "Indicates the legal name of an organisation.",
+            "type": "string",
+            "example": "Hema BV",
+            "maxLength": 105
+          }
+        }
+      },
+      "Individual": {
+        "description": "An Individual is a natural person.",
+        "type": "object",
+        "required": [
+          "birthDate",
+          "gender"
+        ],
+        "properties": {
+          "birthDate": {
+            "description": "Date when the individual was born. It should be in format yyyy-mm-dd.",
+            "type": "string",
+            "format": "date",
+            "example": "1963-07-05"
+          },
+          "deceasedDate": {
+            "description": "Date the Individual has passed away. It should be in format yyyy-mm-dd.",
+            "type": "string",
+            "format": "date",
+            "example": "2019-01-01"
+          },
+          "gender": {
+            "description": "Gender of a person.",
+            "type": "string",
+            "enum": [
+              "FEMALE",
+              "MALE"
+            ]
+          },
+          "bornInUS": {
+            "description": "Answer to the question 'are you born in the USA or official related countries of USA', yes or no. The determination of this information is of importance for legislation (CRS / FATCA).",
+            "type": "boolean"
+          }
+        }
+      },
+      "MetaData": {
+        "description": "Provides the meta data of a certain object, like the legal address, by giving details at which date and time the object was created, by which User Id it was created, at which date and time the object was modified and by which User Id it was modified.",
+        "type": "object",
+        "required": [
+          "createdByUserId",
+          "creationTimestamp"
+        ],
+        "properties": {
+          "createdByUserId": {
+            "description": "The User Id of the person that has created this specific object, like the legal address.",
+            "type": "string",
+            "example": "BA2146"
+          },
+          "creationTimestamp": {
+            "description": "Indicates the date and time when a specific object, like the legal address, was created. It is in the format yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "type": "string",
+            "format": "date-time",
+            "example": "2018-07-05T11:00:09.951Z"
+          },
+          "lastModifiedByUserId": {
+            "description": "The User Id of the person that has modified this specific object, like the legal address.",
+            "type": "string",
+            "example": "BA2146"
+          },
+          "lastModifiedTimestamp": {
+            "description": "Indicates the date and time when a specific object, like the legal address, was modified. It is in the format yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "type": "string",
+            "format": "date-time",
+            "example": "2019-09-16T12:03:07.715Z"
+          }
+        }
+      },
+      "Organisation": {
+        "description": "An Organisation is an organised group of individuals bound by common purposes and activities, that may stand alone in an operational or legal context, other than just jointly holding accounts.",
+        "type": "object",
+        "required": [
+          "kvkNumber"
+        ],
+        "properties": {
+          "kvkNumber": {
+            "description": "This is the registration number from the Dutch Chamber of Commerce (KvK).",
+            "type": "string",
+            "example": "34334259"
+          },
+          "foundationDate": {
+            "description": "Date when the organisation was founded. This date comes from the KvK extract, from which the earliest date is selected from a number of dates registered in the process of establishing an organisation. It should be in format yyyy-mm-dd.",
+            "type": "string",
+            "format": "date",
+            "example": "2017-01-01"
+          },
+          "legalStructureType": {
+            "description": "Type of organisation legal structure (BV, Gmbh). Because the organisation structure is country dependable, the value is represented as 'Country Code'_'legal Structure'.",
+            "type": "string",
+            "enum": [
+              "EU_EUROPEES_ECONOMISCH_SAMENWERKINGSVERBAND",
+              "NL_BEPERKTE_VERENIGING",
+              "NL_BESLOTEN_VENNOOTSCHAP",
+              "NL_BV_IN_OPRICHTING",
+              "NL_COMMANDITAIRE_VENNOOTSCHAP",
+              "NL_COOPERATIE",
+              "NL_EENMANSZAAK",
+              "NL_KERKGENOOTSCHAP",
+              "NL_MAATSCHAP",
+              "NL_NAAMLOZE_VENNOOTSCHAP",
+              "NL_NV_IN_OPRICHTING",
+              "NL_ONDERLINGE_WAARBORGMAATSCHAPPIJ",
+              "NL_OV_IHKV_STICHTING_JONG_ONDERNEMEN",
+              "NL_PUBLIEKRECHTELIJK_RECHTSPERSOON",
+              "NL_REDERIJ",
+              "NL_STICHTING",
+              "NL_VENNOOTSCHAP_ONDER_FIRMA",
+              "NL_VERENIGING_MET_VOLLEDIGE_RECHTSBEVOEGDHEID",
+              "NL_VERENIGING_VAN_EIGENAARS",
+              "NON_NL"
+            ]
+          },
+          "organisationActivity": {
+            "description": "The activity of the organisation. If the organisation is registered in the Dutch Chamber of Commerce (KvK), then this activity is copied from the KvK extract as the SBI (Standaard Bedrijfsindeling) code.",
+            "type": "string",
+            "example": "50401"
+          },
+          "organisationIndustry": {
+            "description": "The predominant industry, as determined by the Bank, in which the organisation or corporate group (the organisation and all of its subsidiaries) is active, expressed as an SBI (Standaard Bedrijfsindeling) code. Note: mostly copied from Organisation Activity (one is chosen in case of many activities).",
+            "type": "string",
+            "example": "50202"
+          },
+          "incorporatedInUS": {
+            "description": "Answer to the question 'is the organisation incorporated in the USA or the official related countries to the USA', yes or no. The determination of this information is of importance for legislation (CRS / FATCA).",
+            "type": "boolean"
+          }
+        }
+      },
+      "Party": {
+        "description": "A Party is either an Individual or an Organisation, that is of interest to ABN AMRO and for whom ABN AMRO maintains information.",
+        "type": "object",
+        "required": [
+          "partyId",
+          "partyType",
+          "managedByOrganisationUnitId",
+          "preferredLanguage",
+          "legalName",
+          "legalAddress"
+        ],
+        "properties": {
+          "partyId": {
+            "description": "Unique identifier for the party. It is an internal number issued by the domain that uniquely identifies a party within domain.",
+            "type": "integer",
+            "format": "int64",
+            "example": 1020560
+          },
+          "partyType": {
+            "description": "Specifies whether a party is an individual or an organisation.",
+            "type": "string",
+            "enum": [
+              "INDIVIDUAL",
+              "ORGANISATION"
+            ]
+          },
+          "customerId": {
+            "description": "Unique identifier for the Customer.",
+            "type": "integer",
+            "format": "int64",
+            "example": 1150836
+          },
+          "clientGroupCode": {
+            "description": "Client group code (CGC) is the segmentation code for clients in a group hierarchy based on expected potential and servicing units.",
+            "type": "string",
+            "example": "1109"
+          },
+          "secUSPersonStatus": {
+            "description": " Indicates whether a party is considered a 'U.S. Person' according to the rules defined by the Securities and Exchange Commission (in 2014). ABN AMRO is not allowed to sell securities to a Party which is secUSPerson. The selling of other bank products may also be restricted depending this secUsPersonStatus.",
+            "type": "string",
+            "enum": [
+              "PARTY_IS_A_SEC_US_PERSON_AND_IS_A_COUNTERPARTY",
+              "PARTY_IS_A_SEC_US_PERSON_AND_IS_AN_US_INSTITUTION",
+              "PARTY_IS_NOT_A_SEC_US_PERSON",
+              "PARTY_IS_NOT_A_SEC_US_PERSON_BECAUSE_IT_IS_A_REPRESENTATION",
+              "PARTY_IS_NOT_A_SEC_US_PERSON_BECAUSE_IT_IS_A_TEMPORARY_RESIDENT",
+              "PARTY_IS_NOT_A_SEC_US_PERSON_BECAUSE_IT_IS_LISTED_AS_SHAREHOLDER",
+              "PARTY_IS_NOT_REVIEWED_YET_ON_CRITERIA_FOR_A_SEC_US_PERSON",
+              "PARTY_IS_SEC_US_PERSON"
+            ]
+          },
+          "managedByOrganisationUnitId": {
+            "description": "Refers to the business unit by which the Party information is managed.",
+            "type": "integer",
+            "format": "int32",
+            "example": 231071
+          },
+          "preferredLanguage": {
+            "description": "Preferred communication language for a Party.",
+            "type": "string",
+            "enum": [
+              "EN",
+              "NL"
+            ]
+          },
+          "individual": {
+            "$ref": "#/components/schemas/Individual"
+          },
+          "organisation": {
+            "$ref": "#/components/schemas/Organisation"
+          },
+          "legalName": {
+            "$ref": "#/components/schemas/FullLegalName"
+          },
+          "legalAddress": {
+            "$ref": "#/components/schemas/FullLegalAddress"
+          }
+        }
+      },
+      "UpdateLegalName": {
+        "description": "Defines the request body to update the Legal Name of either an individual or organisation.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FullIndividualName"
+          },
+          {
+            "$ref": "#/components/schemas/FullOrganisationName"
+          }
+        ]
+      },
+      "FullLegalAddress": {
+        "description": "Legal Address is the address where an Individual lives or a company is established. Also the Meta Data is provided.",
+        "type": "object",
+        "required": [
+          "countryCode",
+          "metaData"
+        ],
+        "properties": {
+          "supplementaryDeliveryPoint": {
+            "description": "The postal address element used to specify supplemental information or instructions for the address/postal delivery point.",
+            "type": "string",
+            "example": "Across Restaurant The Red Heifer",
+            "maxLength": 35
+          },
+          "streetName": {
+            "description": "The name of a street. ",
+            "type": "string",
+            "example": "Meander",
+            "maxLength": 50
+          },
+          "houseNumber": {
+            "description": "A house number, as part of an address of a house or building. NB: The houseNumber and the houseNumberSuffix must be separated by a hyphen (-) !",
+            "type": "string",
+            "example": "75-B",
+            "maxLength": 12
+          },
+          "buildingName": {
+            "description": "Name of the building.",
+            "type": "string",
+            "example": "Miles Building",
+            "maxLength": 50
+          },
+          "proximateCityName": {
+            "description": "Proximate city can be filled with the name of an important city in the proximity or with the name of community it belongs to. This field can only be used for foreign addresses.",
+            "type": "string",
+            "example": "Amsterdam",
+            "maxLength": 50
+          },
+          "cityName": {
+            "description": "Name of the city.",
+            "type": "string",
+            "example": "Amstelveen",
+            "maxLength": 30
+          },
+          "regionName": {
+            "description": "Defines the name of the state, province, county, etc.",
+            "type": "string",
+            "example": "North-Holland",
+            "maxLength": 25
+          },
+          "countryCode": {
+            "description": "The unique identifier indicates the country. Should be provided as an ISO 3166 - alpha 2 code.",
+            "type": "string",
+            "example": "NL",
+            "maxLength": 2
+          },
+          "postCode": {
+            "description": "Code to identify a region, city, village, etc. ",
+            "type": "string",
+            "example": "1181 WN",
+            "maxLength": 13
+          },
+          "metaData": {
+            "$ref": "#/components/schemas/MetaData"
+          }
+        }
+      },
+      "LegalAddress": {
+        "description": "Legal Address is the address where an Individual lives or a company is established.",
+        "type": "object",
+        "required": [
+          "countryCode"
+        ],
+        "properties": {
+          "supplementaryDeliveryPoint": {
+            "description": "The postal address element used to specify supplemental information or instructions for the address/postal delivery point.",
+            "type": "string",
+            "example": "Across Restaurant The Red Heifer",
+            "maxLength": 35
+          },
+          "streetName": {
+            "description": "The name of a street. ",
+            "type": "string",
+            "example": "Meander",
+            "maxLength": 50
+          },
+          "houseNumber": {
+            "description": "A house number, as part of an address of a house or building. NB: The houseNumber and the houseNumberSuffix must be separated by a hyphen (-) !",
+            "type": "string",
+            "example": "75-B",
+            "maxLength": 12
+          },
+          "buildingName": {
+            "description": "Name of the building.",
+            "type": "string",
+            "example": "Miles Building",
+            "maxLength": 50
+          },
+          "proximateCityName": {
+            "description": "Proximate city can be filled with the name of an important city in the proximity or with the name of community it belongs to. This field can only be used for foreign addresses.",
+            "type": "string",
+            "example": "Amsterdam",
+            "maxLength": 50
+          },
+          "cityName": {
+            "description": "Name of the city.",
+            "type": "string",
+            "example": "Amstelveen",
+            "maxLength": 30
+          },
+          "regionName": {
+            "description": "Defines the name of the state, province, county, etc.",
+            "type": "string",
+            "example": "North-Holland",
+            "maxLength": 25
+          },
+          "countryCode": {
+            "description": "The unique identifier indicates the country. Should be provided as an ISO 3166 - alpha 2 code.",
+            "type": "string",
+            "example": "NL",
+            "maxLength": 2
+          },
+          "postCode": {
+            "description": "Code to identify a region, city, village, etc. ",
+            "type": "string",
+            "example": "1181 WN",
+            "maxLength": 13
+          }
+        }
+      },
+      "IndividualName": {
+        "description": "The Legal Name is the full or complete name given by birth and officially registered, e.g in NL in the Basic Registration Individuals; it is used for Party registration.",
+        "type": "object",
+        "required": [
+          "givenName",
+          "surname",
+          "nameInitials"
+        ],
+        "properties": {
+          "givenName": {
+            "description": "is/are (a) personal name(s) given to someone at birth or baptism and used before a family name. For nameType = Legal, all first names are used (that is, personal names appearing before a family name). For nameType = Preferred, a call name is used",
+            "type": "string",
+            "example": "Jan Kurt",
+            "maxLength": 100
+          },
+          "surname": {
+            "description": "Surname of an individual, also known as last name or family name.",
+            "type": "string",
+            "example": "Janssen",
+            "maxLength": 105
+          },
+          "surnamePrefix": {
+            "description": "Surname prefix is part of a surname/familyname of an individual.",
+            "type": "string",
+            "example": "van",
+            "maxLength": 8
+          },
+          "nameInitials": {
+            "description": "Initials are the first letter of each word of a person's given name (names appearing before the family name), each separated by a dot.",
+            "type": "string",
+            "example": "J.K.",
+            "maxLength": 10
+          }
+        }
+      },
+      "Errors": {
+        "description": "This contains a list of errors returned by the API",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "status"
+        ],
+        "properties": {
+          "code": {
+            "description": "A unique and meaningful code for the error",
+            "type": "string"
+          },
+          "message": {
+            "description": "This contains a human readable description for the code and is specifically meant for debug purposes",
+            "type": "string"
+          },
+          "traceId": {
+            "description": "The unique id sent in the request header for end to end traceability of an API call especially in case of errors ",
+            "type": "string"
+          },
+          "status": {
+            "description": "The HTTP response status code under which the code has been categorized"
+          },
+          "params": {
+            "type": "array",
+            "description": "This contains dynamic values which need to be returned sometimes by the API in addition to the code",
+            "minItems": 0,
+            "maxItems": 100,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
